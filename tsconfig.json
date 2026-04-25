@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUncheckedCall": true,
+    "exactFunctionTypes": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "moduleResolution": "nod",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "jsx": "react-native",
+    "sourceMap": true
+  }
+}

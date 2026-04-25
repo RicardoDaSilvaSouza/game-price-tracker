@@ -1,0 +1,26 @@
+{
+  "name": "game-price-tracker",
+  "version": "0.0.0",
+  "scripts": {
+    "start:app": "expo start",
+    "start:web": "expo start --t",
+    "build": "eas build",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "expo": "52",
+    "@expo/react-native-router": "4",
+    "nativewind": "4",
+    "tanstack-query": "5",
+    "zustand": "5",
+    "@react-native/async-storage": "latest",
+    "lucide-react-native": "latest",
+    "react": "17",
+    "react-native": "0.73"
+  },
+  "devDependencies": {
+    "typescript": "5.0.0",
+    "@types/react": "17",
+    "@types/react-native": "0.73"
+  }
+}
