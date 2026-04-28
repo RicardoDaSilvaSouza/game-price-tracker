@@ -4,7 +4,7 @@
 
 **Goal:** Replace Jest with Vitest in the `game-price-tracker-be/` project, preserving existing test files via Vitest's globals mode.
 
-**Architecture:** Drop jest/ts-jest dependencies, install vitest + coverage-v8, replace `jest.config.js` with `vitest.config.ts`, add `tsconfig.json` with `vitest/globals` types. Existing tests in `tests/` work unchanged.
+**Architecture:** Drop jest/ts-jest dependencies, install vitest + coverage-v8, replace `jest.config.js` with `vitest.config.ts`, add `tsconfig.json`, rewrite test files to import `describe`/`it`/`expect` explicitly from `vitest`.
 
 **Tech Stack:** pnpm, TypeScript, Vitest, @vitest/coverage-v8
 
@@ -141,7 +141,6 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    globals: true,
     include: ['**/*.test.ts'],
     coverage: {
       provider: 'v8',
@@ -150,6 +149,8 @@ export default defineConfig({
   },
 })
 ```
+
+`globals` is NOT enabled — test files will import test helpers from `vitest` explicitly.
 
 - [ ] **Step 2: Commit**
 
@@ -178,13 +179,13 @@ Create `game-price-tracker-be/tsconfig.json` with this exact content:
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node", "vitest/globals"]
+    "types": ["node"]
   },
   "include": ["src/**/*", "tests/**/*", "vitest.config.ts"]
 }
 ```
 
-The `"types": ["node", "vitest/globals"]` line is what makes TypeScript recognize `describe`, `it`, `expect` without imports.
+Test helpers (`describe`, `it`, `expect`) are imported explicitly from `vitest` in each test file (Task 6.5), so no `vitest/globals` types entry is needed.
 
 - [ ] **Step 2: Commit**
 
@@ -213,6 +214,46 @@ rm game-price-tracker-be/jest.config.js
 ```bash
 git add -A game-price-tracker-be/jest.config.js
 git commit -m "chore(be): remove jest config"
+```
+
+---
+
+### Task 6.5: Add explicit Vitest imports to test files
+
+**Files:**
+- Modify: `game-price-tracker-be/tests/structure.test.ts`
+- Modify: `game-price-tracker-be/tests/domain/game_price.test.ts`
+- Modify: `game-price-tracker-be/tests/domain/currency.test.ts`
+
+- [ ] **Step 1: Add import to `tests/structure.test.ts`**
+
+Insert this line at the very top of the file (before the existing `import * as fs ...`):
+
+```typescript
+import { describe, it, expect } from 'vitest';
+```
+
+- [ ] **Step 2: Add import to `tests/domain/game_price.test.ts`**
+
+Insert at the very top (before existing imports):
+
+```typescript
+import { describe, it, expect } from 'vitest';
+```
+
+- [ ] **Step 3: Add import to `tests/domain/currency.test.ts`**
+
+Insert at the very top (before existing imports):
+
+```typescript
+import { describe, it, expect } from 'vitest';
+```
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add game-price-tracker-be/tests/
+git commit -m "refactor(be): use explicit vitest imports in test files"
 ```
 
 ---
