@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Currency } from '../../src/game-price-tracker-be/domain/value_object/currency';
 import { GamePrice } from '../../src/game-price-tracker-be/domain/entity/game_price';
 
