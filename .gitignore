@@ -64,6 +64,12 @@ coverage/
 .yarn/build-state.yml
 
 # =========================
+# pnpm Specific
+# =========================
+.pnpm-store
+pnpm-lock.yaml
+
+# =========================
 # Cache & Misc Tools
 # =========================
 .eslintcache

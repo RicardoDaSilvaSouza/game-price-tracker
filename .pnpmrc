@@ -1,0 +1,5 @@
+# .pnpmrc - pnpm configuration for workspace
+# Enables shared lockfile across workspace for single dependency management
+sharedWorkspaceLockfile = true
+# Automatically installs all workspace packages
+recursiveInstall = true
