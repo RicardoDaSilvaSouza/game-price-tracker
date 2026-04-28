@@ -156,7 +156,7 @@ export default defineConfig({
 
 ```bash
 git add game-price-tracker-be/vitest.config.ts
-git commit -m "chore(be): add vitest config with globals and v8 coverage"
+git commit -m "chore(be): add vitest config with v8 coverage"
 ```
 
 ---
