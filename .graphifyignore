@@ -1,0 +1,7 @@
+build/
+target/           # Kotlin/Maven build output
+.gradle/
+node_modules/
+graphify-out/     # don't recurse into own output
+CLAUDE.md
+AGENTS.md
