@@ -91,6 +91,8 @@ out/
 # IntelliJ code coverage
 *.xml
 !jest.config.xml
+# Allow XML resources in the Kotlin/Gradle backend (logback, etc.)
+!game-price-tracker-be/**/*.xml
 # Shelf and workspace
 .idea/shelf/
 .idea/workspace.xml

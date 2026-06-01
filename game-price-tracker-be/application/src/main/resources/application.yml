@@ -1,0 +1,28 @@
+micronaut:
+  application:
+    name: game-price-tracker
+  server:
+    port: 8080
+
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/gpt
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    schema-generate: NONE
+    dialect: POSTGRES
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations: classpath:db/migration
