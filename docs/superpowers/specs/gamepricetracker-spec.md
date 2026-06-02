@@ -37,7 +37,7 @@ Authentication is via an `?key=YOUR_API_KEY` query parameter on most endpoints (
 - Green Man Gaming: `12`
 - Nintendo eShop: `45` *(limited coverage)*
 
-**Rate limiting:** The API is rate-limited; exact values are returned in response headers (`X-RateLimit-Remaining`, `X-RateLimit-Reset`). For a personal single-user app, staying within limits by caching responses in SQLite is straightforward.
+**Rate limiting:** The API is rate-limited; exact values are returned in response headers (`X-RateLimit-Remaining`, `X-RateLimit-Reset`). For a personal single-user app, staying within limits by caching responses in Postgres is straightforward.
 
 **Country support:** Any ISO 3166-1 alpha-2 country code. The API automatically returns prices in the local currency for that country.
 
@@ -141,7 +141,16 @@ CheapShark is a free, no-auth API focused on PC game deals across stores includi
 
 ### 2.1 Architecture Overview
 
-The application follows a two-tier architecture: a **Node.js backend** running locally or on a personal VPS, and an **Expo (React Native + Web) frontend** that connects to it. There is no Redis layer — price data is cached directly in SQLite with a TTL timestamp column. Since only one user accesses the service, SQLite's single-writer model is not a constraint.
+The application follows a two-tier architecture: a **Kotlin + Micronaut backend** running locally or on a personal VPS, and an **Expo (React Native + Web) frontend** that connects to it. The backend talks to a **PostgreSQL 18** database. There is no Redis layer — price data is cached directly in Postgres with a TTL timestamp column. Since only one user accesses the service, contention is a non-issue.
+
+The backend is split into four Gradle modules along clean-architecture boundaries:
+
+| Module | Responsibility |
+|---|---|
+| `core` | Pure-Kotlin domain model (entities, value objects, ports). Zero framework dependencies. |
+| `web` | HTTP controllers, DTOs, request/response mapping. Depends on `core`. |
+| `infra` | Adapters: persistence (Hibernate/JDBC), outbound HTTP clients for ITAD/Steam/Nintendo. Depends on `core`. |
+| `application` | Composition root: Micronaut `main`, Flyway migrations, `application.yml`. Depends on `core`, `web`, `infra`. |
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -150,13 +159,18 @@ The application follows a two-tier architecture: a **Node.js backend** running l
 └────────────────────┬────────────────────────────┘
                      │ HTTP (local network / VPS)
 ┌────────────────────▼────────────────────────────┐
-│             Fastify API Server (Node.js)         │
+│        Micronaut 4 API Server (Kotlin / JVM 21)  │
 │  ┌──────────────────────────────────────────┐   │
-│  │  Price Aggregation Layer                 │   │
-│  │  ITAD · Steam Store · Nintendo eShop     │   │
-│  └─────────────────┬────────────────────────┘   │
-│  ┌──────────────────▼────────────────────────┐  │
-│  │  SQLite (via Prisma)                      │  │
+│  │  application  (main · config · Flyway)   │   │
+│  └──────┬─────────────┬─────────────┬───────┘   │
+│         │             │             │           │
+│  ┌──────▼─────┐ ┌─────▼──────┐ ┌────▼──────┐    │
+│  │    web     │ │    core    │ │   infra   │    │
+│  │ controllers│ │   domain   │ │ persistence│    │
+│  └────────────┘ └────────────┘ │ + clients  │    │
+│                                └─────┬──────┘    │
+│  ┌───────────────────────────────────▼───────┐  │
+│  │  PostgreSQL 18 (Hikari + Flyway)          │  │
 │  │  games · prices · favorites · cache_meta  │  │
 │  └───────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────┘
@@ -201,98 +215,116 @@ hooks/
 
 ---
 
-### 2.3 Backend — Node.js + Fastify
+### 2.3 Backend — Kotlin + Micronaut
 
 | Concern | Library / Tool | Notes |
 |---|---|---|
-| Runtime | **Node.js 22 LTS** | Or Bun as a drop-in for faster cold starts |
-| Framework | **Fastify v5** | Fast, low-overhead HTTP server with schema validation |
-| Language | **TypeScript** | Shared types with frontend via a `/shared` package |
-| ORM | **Prisma v6** | Type-safe access to SQLite; handles migrations |
-| Database | **SQLite** (via Prisma) | Single file, zero infrastructure, sufficient for personal use |
-| Validation | **Zod** | Request/response schema validation |
-| HTTP client | **ky** (or native `fetch`) | Lightweight client for calling ITAD, Steam, Nintendo APIs |
-| Scheduling | **node-cron** | Periodic price refresh jobs (every 6 hours for favorited games) |
-| Environment | **dotenv** | API keys stored in `.env`, never committed |
+| Language | **Kotlin 2.3.x** | Targeting JVM 21 (Micronaut 4 cliff: 5.x requires JVM 25) |
+| Runtime | **JVM 21 (Temurin)** | Resolved via Gradle toolchains + foojay-resolver |
+| Build | **Gradle 8.x (Kotlin DSL)** | Multi-module: `core`, `web`, `infra`, `application` |
+| Framework | **Micronaut 4.10.x** | Netty runtime, JSR-330 DI, compile-time AOT |
+| Annotation processing | **kapt** | For Micronaut bean / config processors |
+| HTTP server | **Micronaut Netty** (`runtime("netty")`) | Reactive, low-overhead |
+| JSON | **Jackson** (`micronaut-jackson-databind`) | Required by Netty for error responses and DTO bind |
+| Validation | **Bean Validation (Jakarta Validation 3)** | Wired via Micronaut Validation |
+| Database | **PostgreSQL 18** | Run locally via `docker-compose`, in prod via VPS |
+| Connection pool | **HikariCP** (`micronaut-jdbc-hikari`) | Default datasource named `default` |
+| Migrations | **Flyway** (`micronaut-flyway` + `flyway-database-postgresql`) | SQL migrations under `application/src/main/resources/db/migration` |
+| ORM / Persistence | **Hibernate JPA** (`micronaut-data-hibernate-jpa`) — *deferred until first `@Entity`* | Currently absent from `application` deps; will be re-added with `micronaut-data-processor` (kapt) when the first JPA entity is introduced |
+| HTTP client | **Micronaut HTTP Client** (declarative `@Client`) | For ITAD / Steam / Nintendo eShop |
+| Scheduling | **`@Scheduled`** (Micronaut) | Periodic price refresh jobs (every 6 hours for favourited games) |
+| Logging | **SLF4J + Logback** | Logback config in `application/src/main/resources/logback.xml` |
+| Tests | **JUnit 5**, **Kotest** matchers, **MockK**, **Micronaut Test (JUnit5)**, **Testcontainers (Postgres)** | Versions pinned in `gradle.properties` |
 
-**Backend API routes:**
+**Backend API routes:** (unchanged — routes are framework-agnostic)
 
 | Route | Description |
 |---|---|
 | `GET /api/search?q={title}&country={CC}` | Search games by title, returns results with best price per game |
-| `GET /api/game/:id/prices?country={CC}` | Full price breakdown for one game across all stores |
-| `GET /api/game/:id/info` | Game metadata (artwork, tags, release date) |
-| `GET /api/favorites/prices?country={CC}` | Bulk price fetch for all favorited game IDs |
+| `GET /api/game/{id}/prices?country={CC}` | Full price breakdown for one game across all stores |
+| `GET /api/game/{id}/info` | Game metadata (artwork, tags, release date) |
+| `GET /api/favorites/prices?country={CC}` | Bulk price fetch for all favourited game IDs |
 | `GET /api/countries` | List of supported country codes and currency symbols |
 
-The backend never forwards raw third-party API keys to the client. All external API calls are server-side only.
+The backend never forwards raw third-party API keys to the client. All external API calls are server-side only. API keys live in environment variables (or a non-committed `application-dev.yml`), not in code.
 
 ---
 
-### 2.4 Database Schema (SQLite via Prisma)
+### 2.4 Database Schema (PostgreSQL via Flyway)
 
-```prisma
-model Game {
-  id          String   @id          // ITAD UUID
-  slug        String
-  title       String
-  type        String                // "game" | "dlc"
-  boxart      String?
-  banner300   String?
-  steamAppid  Int?
-  nintendoId  String?
-  tags        String?               // JSON array stored as string
-  updatedAt   DateTime @updatedAt
+The schema is managed by **Flyway** SQL migrations under `game-price-tracker-be/application/src/main/resources/db/migration/`. The current state is a single placeholder migration `V1__init.sql` that creates a `schema_version_marker` table; the real domain tables land in Phase 1.
 
-  prices      Price[]
-}
+The intended Phase 1 schema (subject to refinement when the first `@Entity` is added) maps to:
 
-model Price {
-  id          Int      @id @default(autoincrement())
-  gameId      String
-  game        Game     @relation(fields: [gameId], references: [id])
-  shop        String                // "Steam", "GOG", "Nintendo eShop", etc.
-  country     String                // ISO 3166-1 alpha-2
-  amount      Float                 // Current price
-  currency    String
-  regularAmt  Float                 // Full (non-discounted) price
-  cutPct      Int                   // Discount percentage 0–100
-  historyLow  Float?                // All-time low for this store+country
-  storeUrl    String?
-  fetchedAt   DateTime @default(now())
+```sql
+-- Phase 1 target (illustrative, not yet committed)
+CREATE TABLE game (
+    id           VARCHAR(64) PRIMARY KEY,       -- ITAD UUID
+    slug         TEXT        NOT NULL,
+    title        TEXT        NOT NULL,
+    type         TEXT        NOT NULL,          -- 'game' | 'dlc'
+    boxart       TEXT,
+    banner300    TEXT,
+    steam_appid  INTEGER,
+    nintendo_id  TEXT,
+    tags         JSONB,
+    updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 
-  @@unique([gameId, shop, country])
-  @@index([gameId, country])
-}
+CREATE TABLE price (
+    id           BIGSERIAL   PRIMARY KEY,
+    game_id      VARCHAR(64) NOT NULL REFERENCES game(id) ON DELETE CASCADE,
+    shop         TEXT        NOT NULL,          -- 'Steam', 'GOG', 'Nintendo eShop', ...
+    country      CHAR(2)     NOT NULL,          -- ISO 3166-1 alpha-2
+    amount       NUMERIC(12,2) NOT NULL,
+    currency     CHAR(3)     NOT NULL,
+    regular_amt  NUMERIC(12,2) NOT NULL,
+    cut_pct      SMALLINT    NOT NULL,          -- 0..100
+    history_low  NUMERIC(12,2),
+    store_url    TEXT,
+    fetched_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (game_id, shop, country)
+);
+CREATE INDEX price_game_country_idx ON price (game_id, country);
 ```
 
-**Cache TTL strategy (no Redis):** Each `Price` row carries a `fetchedAt` timestamp. The backend checks this before deciding whether to call external APIs: if `fetchedAt` is older than 6 hours, it re-fetches; otherwise it returns the cached row. This is implemented as a simple conditional in the service layer — no additional infrastructure needed.
+**Cache TTL strategy (no Redis):** each `price` row carries a `fetched_at` timestamp. The service layer checks it before deciding whether to call external APIs: if older than 6 hours, re-fetch; otherwise return the cached row.
 
 ---
 
-### 2.5 Deployment (Personal VPS or Local)
+### 2.5 Local Development & Deployment
 
-```
-# Install dependencies
-npm install
+**Local dev** — start Postgres via docker-compose, then run the Micronaut app:
 
-# Set up environment
-cp .env.example .env
-# Fill in: ITAD_API_KEY, PORT, DATABASE_URL=file:./dev.db
+```bash
+cd game-price-tracker-be
 
-# Run migrations
-npx prisma migrate deploy
+# 1) Start Postgres 18 (host port 15432 → container 5432, picked to avoid
+#    common 5432 conflicts on the host)
+docker compose up -d
 
-# Start backend
-npm run start:server     # http://localhost:3000
+# 2) Run the full backend test suite (uses Testcontainers — random ephemeral
+#    Postgres port, completely independent of the compose stack)
+./gradlew test
 
-# Start Expo (mobile + web)
-npm run start:app
-# Scan QR code with Expo Go on phone
-# Web: http://localhost:8081
+# 3) Run the application
+./gradlew :application:run     # serves on http://localhost:8080
 ```
 
-For VPS deployment, the backend runs under **PM2** (`pm2 start dist/server.js --name gametracker`) with a reverse proxy via **Caddy** for HTTPS if a domain is available. The Expo web build is served as static files from the same Caddy config.
+The `application.yml` JDBC URL is `jdbc:postgresql://localhost:15432/gpt` to match the docker-compose port mapping.
+
+**Testcontainers note:** the integration smoke test (`ApplicationSmokeTest`) spins up a fresh `postgres:18-alpine` container per run on a random host port, applies Flyway, and verifies the Micronaut context comes up. It is fully isolated from the docker-compose stack and works under OrbStack as well as Docker Desktop.
+
+**VPS deployment** — build a runnable distribution and run under a process supervisor:
+
+```bash
+./gradlew :application:assemble        # produces application/build/distributions/*.tar
+# Copy / extract on the VPS, then:
+DATABASE_URL=jdbc:postgresql://localhost:5432/gpt \
+  ./bin/application
+```
+
+Reverse-proxy with **Caddy** for HTTPS if a domain is available; the Expo web build is served as static files from the same Caddy config.
 
 ---
 
@@ -388,7 +420,7 @@ Each card in the main listing contains:
 ## 4. Development Phases
 
 ### Phase 1 — MVP (Local machine)
-- Backend: Fastify + Prisma + SQLite with ITAD and Steam APIs wired up
+- Backend: Kotlin + Micronaut + Hibernate JPA + Postgres with ITAD and Steam APIs wired up
 - Frontend: Expo app with Search, Game Detail, and Favorites screens
 - Country selector defaulting to device locale
 - Favorites persisted in AsyncStorage
