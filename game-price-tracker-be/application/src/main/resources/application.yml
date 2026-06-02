@@ -6,20 +6,12 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/gpt
+    url: jdbc:postgresql://localhost:15432/gpt
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
     schema-generate: NONE
     dialect: POSTGRES
-
-jpa:
-  default:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: none
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 flyway:
   datasources:
