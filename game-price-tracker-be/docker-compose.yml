@@ -15,7 +15,7 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - gpt_db_data:/var/lib/postgresql/18/docker
+      - gpt_db_data:/var/lib/postgresql
 
 volumes:
   gpt_db_data:
