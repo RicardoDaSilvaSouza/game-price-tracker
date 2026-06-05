@@ -1,0 +1,174 @@
+{
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/gradlew": {
+    "mtime": 1780337258.251913,
+    "hash": "45bf2667b1fbec0e07e42808dc662b6b"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/build.gradle.kts": {
+    "mtime": 1780337097.7604299,
+    "hash": "bb8cedee4151648cff58902d16632048"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/settings.gradle.kts": {
+    "mtime": 1780337093.6538572,
+    "hash": "c85f198a04cc9738e4686de9b5418c4b"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/infra/build.gradle.kts": {
+    "mtime": 1780352171.6103432,
+    "hash": "a0a48db5b9c2ede06c99d9937cfc81f7"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/core/build.gradle.kts": {
+    "mtime": 1780351546.7118812,
+    "hash": "75c3acded417c440ea55a0b8a4806a55"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/core/src/test/kotlin/com/gamepricetracker/core/domain/models/GamePriceTest.kt": {
+    "mtime": 1780351866.494788,
+    "hash": "b80d0cf6400d757664a866587ae5a49b"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/core/src/test/kotlin/com/gamepricetracker/core/domain/models/CurrencyTest.kt": {
+    "mtime": 1780351779.0457206,
+    "hash": "2c98f511f1cf544a788c0d2e0a37f7f3"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/core/src/main/kotlin/com/gamepricetracker/core/domain/models/Currency.kt": {
+    "mtime": 1780351802.2488384,
+    "hash": "5dcac6771bee8118dcc44fc05076d273"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/core/src/main/kotlin/com/gamepricetracker/core/domain/models/GamePrice.kt": {
+    "mtime": 1780351874.1561542,
+    "hash": "b9e789d3be321b970862acbf33a0b984"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/web/build.gradle.kts": {
+    "mtime": 1780352137.7398217,
+    "hash": "a0a48db5b9c2ede06c99d9937cfc81f7"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/buildSrc/build.gradle.kts": {
+    "mtime": 1780351169.7308252,
+    "hash": "e9950675a1c5e8a22090a18ceab84fa6"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/buildSrc/settings.gradle.kts": {
+    "mtime": 1780351160.6547062,
+    "hash": "0409c69df0075f7cdf3e5eb59d2a01e2"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/buildSrc/src/main/kotlin/micronaut-conventions.gradle.kts": {
+    "mtime": 1780352061.5291293,
+    "hash": "27ae80dd206942839037268a86a18f03"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/buildSrc/src/main/kotlin/kotlin-conventions.gradle.kts": {
+    "mtime": 1780351175.3616838,
+    "hash": "2b31618508049e719c2efb4f2a035e33"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/application/build.gradle.kts": {
+    "mtime": 1780421624.1510258,
+    "hash": "b95c604c84f283fa9532f33d3641b696"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/application/src/test/kotlin/com/gamepricetracker/application/ApplicationSmokeTest.kt": {
+    "mtime": 1780421178.2710595,
+    "hash": "195791250e903006c499a10eaa50e5b0"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/application/src/main/resources/db/migration/V1__init.sql": {
+    "mtime": 1780352796.5582232,
+    "hash": "126aed34976511b3247ef30b07451266"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/application/src/main/kotlin/com/gamepricetracker/application/Application.kt": {
+    "mtime": 1780352784.6882455,
+    "hash": "77a6eb7806ef94a1ba4de094ef6c5b77"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/README.md": {
+    "mtime": 1776513619.6984906,
+    "hash": "8f9ff2bc855569ad72d6124072e6bd42"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/docker-compose.yml": {
+    "mtime": 1780421101.5810676,
+    "hash": "5898da0dcaf16288ac11a72ec87173de"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/application/src/test/resources/application-test.yml": {
+    "mtime": 1780421213.3457618,
+    "hash": "391bc02a8f55b2ec14f52302378baa8c"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/game-price-tracker-be/application/src/main/resources/application.yml": {
+    "mtime": 1780421630.1117544,
+    "hash": "1598981cfd12ec82dbbe492504e5ebc6"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-04-21-game-price-tracker-fe-phase2.md": {
+    "mtime": 1777132805.3202856,
+    "hash": "0bbb75228623f3e38c07e13b86f7f66c"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-04-21-game-price-tracker-fe-phase6.md": {
+    "mtime": 1777133099.181585,
+    "hash": "6fae25f9fbc0da5ba3dd68f7045643be"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-04-21-game-price-tracker-fe-phase3.md": {
+    "mtime": 1777132811.820971,
+    "hash": "f0a89815c8818e2329a993455a8215d8"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-04-21-game-price-tracker-fe-phase4.md": {
+    "mtime": 1777132818.1645138,
+    "hash": "4b8a85581334a6a4a4cee7dd97a0a230"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-04-21-game-price-tracker-fe-phase0.md": {
+    "mtime": 1777132537.3546007,
+    "hash": "eded48683ba36d8d8c7a95d8cdc04586"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-04-21-game-price-tracker-fe-phase1.md": {
+    "mtime": 1777132798.9928546,
+    "hash": "55d96918e43016debe980348162e7994"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-04-21-game-price-tracker-fe-phase5.md": {
+    "mtime": 1777133045.4204664,
+    "hash": "3340fb718e7ca6fa51fc013121f17873"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/2026-06-01-backend-kotlin-micronaut-refactor.md": {
+    "mtime": 1780336313.7456763,
+    "hash": "3fc6709782ebf8e0745c3934f6b17d43"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-21-game-price-tracker-be-phase0.md": {
+    "mtime": 1776722558.6231546,
+    "hash": "d9941c1f2c557f8dbf3a1f812954f8a8"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-21-game-price-tracker-be-phase4.md": {
+    "mtime": 1776803453.5405056,
+    "hash": "ee799f076f67b0bb8f5e1af9428fcfee"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-21-game-price-tracker-be-phase5.md": {
+    "mtime": 1776803494.699374,
+    "hash": "a6503c72e19a7481d009b0759d1ac414"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-21-game-price-tracker-be-phase1.md": {
+    "mtime": 1776723264.0016356,
+    "hash": "839051230a7ecd23aa957831eeb2af6e"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-21-game-price-tracker-be-phase6.md": {
+    "mtime": 1776803543.6600046,
+    "hash": "031a55e261bc3b68a074ed824d4a92d3"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-21-game-price-tracker-be-phase2.md": {
+    "mtime": 1776803263.5076776,
+    "hash": "67aea4d08eccf13fc21e2162c285c3ee"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-28-be-jest-to-vitest-migration.md": {
+    "mtime": 1777414351.1130302,
+    "hash": "41fa33ca250610a1b3fba0f233cf0096"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/plans/archive/2026-04-21-game-price-tracker-be-phase3.md": {
+    "mtime": 1776803363.49182,
+    "hash": "b8d740c87b2758c0c667fab8d1724986"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/specs/2026-04-18-gamepricetracker-fe-setup-detailed-design.md": {
+    "mtime": 1776720361.7111928,
+    "hash": "feaf7a201c799ae391dd2a8400950d4e"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/specs/gamepricetracker-spec.md": {
+    "mtime": 1780424267.6523669,
+    "hash": "4e1828c9b9b82f6c09e280f5dd0537a8"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/specs/2026-06-01-backend-kotlin-micronaut-refactor-design.md": {
+    "mtime": 1780335854.4349544,
+    "hash": "7e7c769d6722b6adf4ba36429640dda9"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/specs/archive/2026-04-28-be-jest-to-vitest-migration-design.md": {
+    "mtime": 1777414084.3759232,
+    "hash": "6658a8eb7ebcce2d2817c8efb5b1a232"
+  },
+  "/Users/ricardodasilvasouza/workspace/personal/game-price-tracker/docs/superpowers/specs/archive/2026-04-18-gamepricetracker-be-setup-detailed-design.md": {
+    "mtime": 1776720589.253473,
+    "hash": "0036dcd61ba75fb4090c98c6abc19a8c"
+  }
+}
