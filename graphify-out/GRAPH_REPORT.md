@@ -1,4 +1,4 @@
-# Graph Report - game-price-tracker  (2026-06-03)
+# Graph Report - game-price-tracker  (2026-06-06)
 
 ## Corpus Check
 - 18 files · ~25,940 words
